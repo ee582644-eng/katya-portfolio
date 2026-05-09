@@ -1,100 +1,156 @@
-from pathlib import Path
-import zipfile
-from PIL import Image
-import shutil
+from docx import Document
+from docx.shared import Pt
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
-base = Path("/mnt/data")
-site_dir = base / "katya_portfolio_site"
-site_dir.mkdir(exist_ok=True)
+content = """
+РАЗБОР ПОРТФОЛИО И СТРАТЕГИЯ РАЗВИТИЯ
 
-# Copy html
-html_src = base / "katya_visual_designer_portfolio.html"
-html_dst = site_dir / "index.html"
-shutil.copy(html_src, html_dst)
+Общий вывод
 
-# Collect images
-image_names = [
-    "IMG_7958.png","IMG_7955.png","IMG_7962.png","IMG_7959.png",
-    "IMG_7940.png","IMG_7964.png","IMG_7932.png","IMG_7950.png",
-    "IMG_7951.png","IMG_7934.png","IMG_7936.png","IMG_7957.png",
-    "IMG_7935.png"
-]
+Текущий уровень работ уже сильно выше обычного «дизайнера карточек для маркетплейсов».
+Визуал выглядит как сочетание:
+• art direction
+• AI creative production
+• premium visual design
+• marketplace strategy
+• social media design
 
-# Optimize images and save
-for name in image_names:
-    src = base / name
-    if src.exists():
-        img = Image.open(src)
-        out = site_dir / name.replace(".png", ".jpg")
-        rgb = img.convert("RGB")
-        rgb.save(out, quality=82, optimize=True)
+Главная сильная сторона — умение создавать ощущение бренда, а не просто оформлять карточки.
 
-# Create lightweight html referencing local jpgs
-html = html_dst.read_text(encoding="utf-8")
+ЧТО УЖЕ ВЫГЛЯДИТ ОЧЕНЬ СИЛЬНО
 
-for name in image_names:
-    png = name
-    jpg = name.replace(".png", ".jpg")
-    html = html.replace(f'data:image/png;base64', 'data:image/png;base64')  # noop
+1. Premium beauty aesthetic
+Самое сильное направление:
+• Lumière
+• skincare visual
+• Pinterest визуалы
+• AI beauty photos
+• Reels covers
+• fashion / premium style
 
-# Simpler rewrite: create minimal loader page
-simple_html = """<!doctype html>
-<html lang="ru">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Katya Visual Designer</title>
-<style>
-body{margin:0;background:#070707;color:#f5ede2;font-family:Inter,Arial,sans-serif}
-.wrap{width:min(1200px,92vw);margin:auto;padding:40px 0}
-.hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
-img{width:100%;display:block;border-radius:28px}
-h1{font-size:72px;line-height:.9;margin:0 0 20px;font-family:Georgia,serif}
-p{color:#c9b9a5;font-size:20px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
-.card{background:#111;border:1px solid #2c241d;border-radius:24px;overflow:hidden}
-.cap{padding:16px}
-a.btn{display:inline-block;padding:14px 22px;border-radius:999px;background:#d6b182;color:#111;text-decoration:none;font-weight:700}
-@media(max-width:800px){.hero,.grid{grid-template-columns:1fr}h1{font-size:48px}}
-</style>
-</head>
-<body>
-<div class="wrap">
-<div class="hero">
-<div>
-<h1>Визуал, который продаёт</h1>
-<p>Premium-карточки WB/Ozon, AI-фотосъёмка и Reels/Pinterest визуалы для брендов.</p>
-<a class="btn" href="https://t.me/pt_katya">Telegram</a>
-</div>
-<div><img src="IMG_7958.jpg"></div>
-</div>
+Почему это работает:
+• дорогая палитра
+• cinematic lighting
+• спокойный premium contrast
+• хороший фокус
+• воздух в композиции
+• дорого выглядящий AI visual
 
-<div class="grid">
+2. Before / After кейсы
+Очень сильные работы:
+• шампунь before/after
+• Barko Pet redesign
+• WB redesign
+
+Почему это продаёт:
+• показывается проблема
+• показывается решение
+• виден результат
+
+3. Системность визуала
+Повторяются:
+• единая логика
+• типографика
+• композиция
+• структура
+• визуальная система
+
+ЧТО СЕЙЧАС ТОРМОЗИТ РОСТ
+
+1. Слишком одинаковый visual language
+Большинство кейсов:
+• black / beige
+• luxury
+• soft gold
+• premium beauty aesthetic
+
+Нужно добавить:
+• контраст
+• mass-market стили
+• tech aesthetic
+• яркие коммерческие кейсы
+
+ЧЕГО НЕ ХВАТАЕТ
+
+1. Яркий MASS MARKET CASE
+Темы:
+• sport
+• supplements
+• electronics
+• kitchen
+• gaming
+
+2. Ultra minimal TECH CASE
+Темы:
+• AI SaaS
+• app design
+• dashboard
+• gadgets
+
+3. Viral low-price segment case
+Нужен кейс дешёвого товара с дорогой подачей.
+
+САМЫЕ СИЛЬНЫЕ РАБОТЫ
+
+1 место — Lumière skincare visual
+2 место — Reels cover pack
+3 место — Шампунь before / after
+4 место — Barko Pet
+
+ГЛАВНЫЙ АПГРЕЙД ПОЗИЦИОНИРОВАНИЯ
+
+Перестать продавать себя как:
+«дизайнер карточек WB»
+
+Начать продавать как:
+• Visual Designer
+• Marketplace Visual Strategist
+• AI Art Designer
+• Brand Visual Designer
+• Creative Designer
+
+КАК ДОЛЖЕН ВЫГЛЯДЕТЬ INSTAGRAM
+
+Не:
+«делаю карточки WB»
+
+А:
+«создаю визуал, который усиливает бренд и продажи»
+
+ЧТО НУЖНО СДЕЛАТЬ СРОЧНО
+
+1. Собрать полноценный PDF portfolio
+2. Сделать 3 fake бренда
+3. Добавить motion
+
+ГЛАВНЫЙ ВЫВОД
+
+Главная сила:
+• visual storytelling
+• art direction
+• AI production
+• ощущение бренда
+• коммерческий визуал
+
+Большинство дизайнеров маркетплейсов делают просто инфографику.
+У тебя уже чувствуется:
+• бренд
+• эстетика
+• стратегия
+• эмоция
+• продающий визуал
 """
 
-cards = [
-("IMG_7955.jpg","Barko Pet / marketplace case"),
-("IMG_7962.jpg","Before / After redesign"),
-("IMG_7959.jpg","Reels cover pack"),
-("IMG_7940.jpg","Glass Hair campaign"),
-("IMG_7964.jpg","Marketplace shampoo card"),
-("IMG_7932.jpg","AI beauty photoshoot"),
-("IMG_7950.jpg","Fashion marketplace"),
-("IMG_7951.jpg","Dark fashion visual"),
-("IMG_7934.jpg","Pinterest workspace visual"),
-]
+doc = Document()
 
-for img,cap in cards:
-    simple_html += f'<div class="card"><img src="{img}"><div class="cap">{cap}</div></div>\n'
+title = doc.add_heading('Разбор портфолио и стратегия развития', level=1)
+title.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
-simple_html += "</div></div></body></html>"
+p = doc.add_paragraph()
+run = p.add_run(content)
+run.font.size = Pt(11)
 
-(site_dir / "index.html").write_text(simple_html, encoding="utf-8")
+path = "/mnt/data/portfolio_review_strategy.docx"
+doc.save(path)
 
-# zip
-zip_path = base / "katya_portfolio_site.zip"
-with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
-    for file in site_dir.iterdir():
-        z.write(file, arcname=file.name)
-
-print("Created:", zip_path)
+print(f"Файл сохранён: {path}")
